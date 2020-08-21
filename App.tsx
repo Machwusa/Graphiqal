@@ -1,29 +1,28 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import {createStackNavigator} from 'react-navigation-stack';
-import {createAppContainer} from 'react-navigation'
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 
 import HomeScreen from './screens/HomeScreen';
 
-const RootStack = createStackNavigator({
-      Home: {
-        screen: HomeScreen,
-      },
-    },
+const Stack = createStackNavigator();
 
-    {
-      initialRouteName: 'Home',
-      navigationOptions: {
-        headerStyle: {
-          backgroundColor: '#48BBEC',
-        },
-      },
-      headerTintColor: '#48BBEC',
-      headerTitleStyle: {
-        fontWeight: 'bold',
-      }
-    }
-);
+function App() {
+    return (
+        <NavigationContainer>
+            <Stack.Navigator>
+                <Stack.Screen
+                    name="Users"
+                    component={HomeScreen}
+                    options={{
+                        title: 'My users',
+                        headerStyle: {
+                            backgroundColor: '#87CEEB'
+                        }
+                    }}
+                />
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
+}
 
-export default createAppContainer(RootStack);
+export default App;

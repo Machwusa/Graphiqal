@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {FlatList } from 'react-native';
 
 import ApolloClient from 'apollo-boost';
@@ -6,30 +6,26 @@ import gql from 'graphql-tag';
 
 import UserItem from '../components/UserItem';
 
-type state = {
-    dataSource: any,
+interface Props {
+    //code related to your props goes here
+}
+interface State  {
+    usersData: any
 }
 
-
-export default class HomeScreen extends React.Component<state> {
-
-    static navigationOptions = {
-        title: `HomeScreen`,
-        headerStyle: {
-            backgroundColor: '#ADD8E6'
-        },
-    };
+export default class HomeScreen extends React.Component<Props, State> {
 
     constructor(props: any) {
         super(props);
-        this.state = {
-            dataSource: null,
+
+        this.state ={
+            usersData: [],
         }
+
     }
 
     componentDidMount() {
         const client = new ApolloClient({uri: 'https://graphql-android-project.herokuapp.com/graphql'});
-
         client.query({
             query: gql`
                 query {
@@ -42,22 +38,16 @@ export default class HomeScreen extends React.Component<state> {
             `
         }).then(responseJson => {
 
-            console.log(responseJson)
+            this.setState({usersData: responseJson.data.users})
 
-            this.setState({
-                dataSource: responseJson,
-            })
         })
         .catch((error) => console.log(error));
     }
 
     render() {
-        // const {navigate} = this.props.navigation;
-       // let data = this.state.dataSource;
         return (
-       /*     <UserItem name="Boitshoko" age="28" profession={"Dev"}/>*/
             <FlatList
-                data={this.state.dataSource}
+                data={this.state.usersData}
                 renderItem={({item}) => <UserItem {...item}/>}
                 keyExtractor={(item, index) => index.toString()}
             />
